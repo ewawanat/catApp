@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Cat } from "@/app/page";
@@ -19,6 +19,7 @@ type CatProps = {
 const CatCard = ({ cat }: CatProps) => {
     const { favourites, addFavourite, removeFavourite } = useFavourites();
     const isFavourite = favourites.some((fav) => fav.id === cat.id);
+    const [votes, setVotes] = useState(cat.votes || 0);
 
     const toggleFavorite = () => {
         if (isFavourite) {
@@ -29,15 +30,13 @@ const CatCard = ({ cat }: CatProps) => {
     };
 
     const handleVoteUp = () => {
-        // Implement vote up logic if needed
+        setVotes((prevVotes) => prevVotes + 1);
     };
 
     const handleVoteDown = () => {
-        // Implement vote down logic if needed
+        setVotes((prevVotes) => prevVotes - 1);
     };
 
-    const votes = cat.votes || 0; // Use the votes from the cat object
-    console.log("Cat ID:", cat.id); // Check if this prints the correct ID
 
     return (
         <div className={styles["cat-card-container"]}>
@@ -51,7 +50,6 @@ const CatCard = ({ cat }: CatProps) => {
                     },
                 }}
             >
-                View Details
                 <Image
                     src={cat.url}
                     alt={`Cat ${cat.id}`}

@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { CircularProgress, Typography } from "@mui/material";
 import Image from "next/image";
-import styles from "./CatBreedCard.module.css";
 import { AppCatBreedDetails, transformBreedData } from "@/utils/CatBreedModel";
+
+import styles from './CatBreedCard.module.css'
 
 const BreedDetails = () => {
     const router = useRouter();
@@ -75,7 +76,7 @@ const BreedDetails = () => {
     const imageSrc = breedDetails?.image ? decodeURIComponent(breedDetails?.image) : "/images/placeholder.jpg";
 
     return (
-        <div className={styles["breed-details-container"]}>
+        <div className={styles['cat-breed-card-container']}>
             <div className={styles["left-col"]}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     {breedDetails?.name || "Unknown Breed"}
