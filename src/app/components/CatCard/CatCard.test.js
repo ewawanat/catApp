@@ -2,16 +2,25 @@ import * as React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react';
 import { userEvent } from "@testing-library/user-event";
+import { axe, toHaveNoViolations } from 'jest-axe';
 
 import CatCard from './CatCard';
 import { useFavourites } from '../../../context/FavouritesContext';
 
-// Mock the useFavourites hook
 jest.mock('../../../context/FavouritesContext', () => ({
     useFavourites: jest.fn(),
 }));
+expect.extend(toHaveNoViolations); // Extending jest to use axe matcher
+
 
 describe('CatCard', () => {
+    const cat = {
+        id: "1",
+        url: "https://example.com/cat.jpg",
+        width: 500,
+        height: 500,
+        votes: 10,
+    };
     it('renders and allows voting', async () => {
         // Mock the return value of useFavourites
         useFavourites.mockReturnValue({
@@ -19,14 +28,6 @@ describe('CatCard', () => {
             addFavourite: jest.fn(),
             removeFavourite: jest.fn(),
         });
-
-        const cat = {
-            id: '1',
-            url: 'https://example.com/cat.jpg',
-            width: 500,
-            height: 500,
-            votes: 10,
-        };
 
         render(<CatCard cat={cat} />);
         // Check if the image is rendered
@@ -56,13 +57,7 @@ describe('CatCard', () => {
             removeFavourite: removeFavouriteMock,
         });
 
-        const cat = {
-            id: "1",
-            url: "https://example.com/cat.jpg",
-            width: 500,
-            height: 500,
-            votes: 10,
-        };
+
 
         render(<CatCard cat={cat} />);
 
@@ -88,5 +83,27 @@ describe('CatCard', () => {
 
         // Check if the addFavourite function was called
         expect(addFavouriteMock).toHaveBeenCalledWith(cat);
+    });
+    it('matches the snapshot', () => {
+        const addFavouriteMock = jest.fn();
+        const removeFavouriteMock = jest.fn();
+
+        // Mock the return value for the favourites context
+        useFavourites.mockReturnValue({
+            favourites: [{ id: "1", url: "https://example.com/cat.jpg", width: 500, height: 500, votes: 10 }],
+            addFavourite: addFavouriteMock,
+            removeFavourite: removeFavouriteMock,
+        });
+        const { asFragment } = render(<CatCard cat={cat} />);
+
+        // Take a snapshot of the component
+        expect(asFragment()).toMatchSnapshot();
+    });
+    it('should have no accessibility violations', async () => {
+        const { container } = render(<CatCard cat={cat} />);
+
+        // Check for accessibility violations
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
     });
 });

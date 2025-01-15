@@ -54,11 +54,6 @@ const HomePage = () => {
           'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
         },
       });
-      console.log('response', response)
-      response.headers.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error fetching votes:', errorText);

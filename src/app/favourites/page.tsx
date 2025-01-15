@@ -7,6 +7,7 @@ import styles from "./Favourites.module.css";
 
 const FavouritesPage = () => {
     const { favourites } = useFavourites();
+    //TODO: make sure the previous favourites are fetched and displayed 
 
     if (favourites.length === 0) {
         return <p className={styles["no-favourites"]}>No favourites yet!</p>;

@@ -13,7 +13,6 @@ import { Cat } from "@/app/page";
 import { useFavourites } from "../../../context/FavouritesContext";
 import styles from "./CatCard.module.css";
 
-
 type CatProps = {
     cat: Cat;
 };
@@ -31,16 +30,38 @@ const CatCard = ({ cat }: CatProps) => {
         }
     };
 
-    const handleVoteUp = () => {
-        setVotes((prevVotes) => prevVotes + 1);
-        //TODO: set up api call to also send the POST request to update the number of votes
+    const voteForCat = async (value: number) => {
+        try {
+            const response = await fetch("https://api.thecatapi.com/v1/votes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": process.env.NEXT_PUBLIC_CAT_API_KEY || "",
+                },
+                body: JSON.stringify({
+                    image_id: cat.id,
+                    sub_id: "user-123", // Hardcoded user ID
+                    value,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to vote for cat");
+            }
+        } catch (error) {
+            console.error("Error voting for cat:", error);
+        }
     };
 
-    const handleVoteDown = () => {
-        setVotes((prevVotes) => prevVotes - 1);
-        //TODO: set up api call to also send the POST request to update the number of votes
+    const handleVoteUp = async () => {
+        setVotes((prevVotes) => prevVotes + 1); // Optimistically update the state
+        await voteForCat(1); // Send POST request for upvote
     };
 
+    const handleVoteDown = async () => {
+        setVotes((prevVotes) => prevVotes - 1); // Optimistically update the state
+        await voteForCat(-1); // Send POST request for downvote
+    };
 
     return (
         <div className={styles["cat-card-container"]}>
@@ -63,8 +84,7 @@ const CatCard = ({ cat }: CatProps) => {
                 />
             </Link>
             <div className={styles["actions-container"]}>
-                <IconButton onClick={toggleFavorite} aria-label={isFavourite ? "Remove from favourites" : "Add to favourites"}
-                >
+                <IconButton onClick={toggleFavorite} aria-label={isFavourite ? "Remove from favourites" : "Add to favourites"}>
                     {isFavourite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
                 </IconButton>
                 <IconButton onClick={handleVoteUp}>

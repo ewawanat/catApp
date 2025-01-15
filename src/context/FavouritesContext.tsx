@@ -15,10 +15,13 @@ export const FavouritesProvider = ({ children }: { children: React.ReactNode }) 
 
     const addFavourite = (cat: Cat) => {
         setFavourites((prev) => [...prev, cat]);
+        //add logic for making the POST request to update the favourites on backend
     };
 
     const removeFavourite = (catId: string) => {
         setFavourites((prev) => prev.filter((cat) => cat.id !== catId));
+        //add logic for making the POST request to update the favourites on backend
+
     };
 
     return (
