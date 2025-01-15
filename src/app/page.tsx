@@ -24,24 +24,37 @@ export type Cat = {
   breeds?: Breed[];
 };
 
+type Image = {
+  id: string;
+  url: string;
+}
+
 type Vote = {
+  id: string;
   image_id: string;
+  sub_id: string;
+  created_at: string;
   value: number;
+  country_code: string;
+  image: Image;
 };
 
 const HomePage = () => {
   const [catData, setCatData] = useState<Cat[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string | null>(null);
-  // const [catBreedDetails, setCatBreedDetails] = useState<AppCatBreedDetails>(undefined)
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchVotesForCats = useCallback(async (): Promise<Vote[]> => {
+  const fetchVotesForCats = useCallback(async () => {
     try {
-      const response = await fetch(`https://api.thecatapi.com/v1/votes?&order=DESC`, {
+      const response = await fetch(`https://api.thecatapi.com/v1/votes`, {
         headers: {
           'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
         },
+      });
+      console.log('response', response)
+      response.headers.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
       });
 
       if (!response.ok) {
@@ -49,8 +62,7 @@ const HomePage = () => {
         console.error('Error fetching votes:', errorText);
         return [];
       }
-
-      const data: Vote[] = await response.json();
+      const data = await response.json()
       return data || [];
     } catch (error) {
       console.error('Error fetching votes:', error);
@@ -62,15 +74,15 @@ const HomePage = () => {
     setLoading(true);
     setError(null);
     try {
-      // const url = breedId ? `/api/fetchCats?breedId=${breedId}` : '/api/fetchCats';
-      const url = 'api/fetchCats'
-      const response = await fetch(url);
+      const response = await fetch('https://api.thecatapi.com/v1/images/search?limit=10&has_breeds=1', {
+        headers: {
+          'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
+        },
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
       const data: Cat[] = await response.json();
-      // const breedDetails = data[0].breeds
-      // setCatBreedDetails(breedDetails ? breedDetails : null)
       const votesData = await fetchVotesForCats();
       const catsWithVotes = data.map((cat) => {
         const catVotes = votesData.filter((vote: Vote) => vote.image_id === cat.id);

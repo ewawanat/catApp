@@ -16,6 +16,7 @@ type CatBreedSelectorProps = {
 const CatBreedSelector: React.FC<CatBreedSelectorProps> = ({ onBreedSelect }) => {
     const [breeds, setBreeds] = useState<Breed[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchBreeds = async () => {
@@ -28,8 +29,9 @@ const CatBreedSelector: React.FC<CatBreedSelectorProps> = ({ onBreedSelect }) =>
                 });
                 const data: Breed[] = await response.json();
                 setBreeds(data);
-            } catch (err) {
-                console.error("Error fetching breeds:", err);
+            } catch (error) {
+                console.error("Error fetching breeds:", error);
+                setError('Failed to fetch breeds')
             } finally {
                 setLoading(false);
             }
@@ -42,6 +44,7 @@ const CatBreedSelector: React.FC<CatBreedSelectorProps> = ({ onBreedSelect }) =>
         onBreedSelect(value ? value.id : null);
     };
 
+    if (error) return <div>Ooops the cat brees escaped! Please try to catch them again later.</div>
     return (
         <Autocomplete
             className={styles['autocomplete']}
