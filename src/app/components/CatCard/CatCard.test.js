@@ -1,7 +1,7 @@
 import * as React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react';
-import { userEvent } from "@testing-library/user-event";
+import { userEvent } from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 import CatCard from './CatCard';
@@ -15,8 +15,8 @@ expect.extend(toHaveNoViolations); // Extending jest to use axe matcher
 
 describe('CatCard', () => {
     const cat = {
-        id: "1",
-        url: "https://example.com/cat.jpg",
+        id: '1',
+        url: 'https://example.com/cat.jpg',
         width: 500,
         height: 500,
         votes: 10,
@@ -52,7 +52,7 @@ describe('CatCard', () => {
 
         // Mock the return value for the favourites context
         useFavourites.mockReturnValue({
-            favourites: [{ id: "1", url: "https://example.com/cat.jpg", width: 500, height: 500, votes: 10 }],
+            favourites: [{ id: '1', url: 'https://example.com/cat.jpg', width: 500, height: 500, votes: 10 }],
             addFavourite: addFavouriteMock,
             removeFavourite: removeFavouriteMock,
         });
@@ -62,7 +62,7 @@ describe('CatCard', () => {
         render(<CatCard cat={cat} />);
 
         // Check if the favourite button is rendered correctly
-        const favouriteButton = screen.getByRole("button", { name: /remove from favourites/i });
+        const favouriteButton = screen.getByRole('button', { name: /remove from favourites/i });
         await userEvent.click(favouriteButton);
 
         // Check if the removeFavourite function was called
@@ -78,7 +78,7 @@ describe('CatCard', () => {
         // Re-render the component to reflect the updated favourites state
         render(<CatCard cat={cat} />);
 
-        const addFavouriteButton = screen.getByRole("button", { name: /add to favourites/i });
+        const addFavouriteButton = screen.getByRole('button', { name: /add to favourites/i });
         await userEvent.click(addFavouriteButton);
 
         // Check if the addFavourite function was called
@@ -90,7 +90,7 @@ describe('CatCard', () => {
 
         // Mock the return value for the favourites context
         useFavourites.mockReturnValue({
-            favourites: [{ id: "1", url: "https://example.com/cat.jpg", width: 500, height: 500, votes: 10 }],
+            favourites: [{ id: '1', url: 'https://example.com/cat.jpg', width: 500, height: 500, votes: 10 }],
             addFavourite: addFavouriteMock,
             removeFavourite: removeFavouriteMock,
         });

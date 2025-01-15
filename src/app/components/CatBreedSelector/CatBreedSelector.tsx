@@ -1,7 +1,7 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+'use client';
+import React, { useState, useEffect } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import styles from './CatBreedSelector.module.css'
 
 type Breed = {
@@ -22,15 +22,15 @@ const CatBreedSelector: React.FC<CatBreedSelectorProps> = ({ onBreedSelect }) =>
         const fetchBreeds = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://api.thecatapi.com/v1/breeds", {
+                const response = await fetch('https://api.thecatapi.com/v1/breeds', {
                     headers: {
-                        "x-api-key": process.env.NEXT_PUBLIC_CAT_API_KEY || "",
+                        'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
                     },
                 });
                 const data: Breed[] = await response.json();
                 setBreeds(data);
             } catch (error) {
-                console.error("Error fetching breeds:", error);
+                console.error('Error fetching breeds:', error); //TODO in a real app, log it somewhere useful
                 setError('Failed to fetch breeds')
             } finally {
                 setLoading(false);
@@ -52,7 +52,7 @@ const CatBreedSelector: React.FC<CatBreedSelectorProps> = ({ onBreedSelect }) =>
             getOptionLabel={(option) => option.name}
             loading={loading}
             onChange={handleChange}
-            renderInput={(params) => <TextField {...params} label="Select Cat Breed" variant="filled" />}
+            renderInput={(params) => <TextField {...params} label='Select Cat Breed' variant='filled' />}
         />
     );
 };

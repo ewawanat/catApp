@@ -1,6 +1,6 @@
-"use client";
-import React, { createContext, useContext, useState } from "react";
-import { Cat } from "@/app/page";
+'use client';
+import React, { createContext, useContext, useState } from 'react';
+import { Cat } from '@/app/page';
 
 type FavouritesContextType = {
     favourites: Cat[];
@@ -15,12 +15,12 @@ export const FavouritesProvider = ({ children }: { children: React.ReactNode }) 
 
     const addFavourite = (cat: Cat) => {
         setFavourites((prev) => [...prev, cat]);
-        //add logic for making the POST request to update the favourites on backend
+        //TODO: add logic for making the POST request to update the favourites on backend
     };
 
     const removeFavourite = (catId: string) => {
         setFavourites((prev) => prev.filter((cat) => cat.id !== catId));
-        //add logic for making the POST request to update the favourites on backend
+        //TODO: add logic for making the POST request to update the favourites on backend
 
     };
 
@@ -34,7 +34,7 @@ export const FavouritesProvider = ({ children }: { children: React.ReactNode }) 
 export const useFavourites = () => {
     const context = useContext(FavouritesContext);
     if (!context) {
-        throw new Error("useFavourites must be used within a FavouritesProvider");
+        throw new Error('useFavourites must be used within a FavouritesProvider');
     }
     return context;
 };

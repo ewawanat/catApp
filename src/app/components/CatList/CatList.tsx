@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Cat } from "@/app/page";
-import CatCard from "../CatCard/CatCard";
+import React from 'react';
+import { Cat } from '@/app/page';
+import CatCard from '../CatCard/CatCard';
 import styles from './CatList.module.css'
 
 type CatListProps = {
