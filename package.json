@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -22,6 +22,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
     "@eslint/eslintrc": "^3",
+    "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
@@ -36,11 +37,5 @@
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
-    },
-    "testEnvironment": "jsdom"
   }
 }

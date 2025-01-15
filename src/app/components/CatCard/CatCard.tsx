@@ -2,15 +2,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Cat } from "@/app/page";
-import styles from "./CatCard.module.css";
-import { useFavourites } from "../../../context/FavouritesContext";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import Typography from "@mui/material/Typography";
+
+import { Cat } from "@/app/page";
+import { useFavourites } from "../../../context/FavouritesContext";
+import styles from "./CatCard.module.css";
+
 
 type CatProps = {
     cat: Cat;
@@ -31,10 +33,12 @@ const CatCard = ({ cat }: CatProps) => {
 
     const handleVoteUp = () => {
         setVotes((prevVotes) => prevVotes + 1);
+        //TODO: set up api call to also send the POST request to update the number of votes
     };
 
     const handleVoteDown = () => {
         setVotes((prevVotes) => prevVotes - 1);
+        //TODO: set up api call to also send the POST request to update the number of votes
     };
 
 
@@ -55,12 +59,12 @@ const CatCard = ({ cat }: CatProps) => {
                     alt={`Cat ${cat.id}`}
                     width={cat.width}
                     height={cat.height}
-                    layout="responsive"
                     className={styles["image-fit"]}
                 />
             </Link>
             <div className={styles["actions-container"]}>
-                <IconButton onClick={toggleFavorite}>
+                <IconButton onClick={toggleFavorite} aria-label={isFavourite ? "Remove from favourites" : "Add to favourites"}
+                >
                     {isFavourite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
                 </IconButton>
                 <IconButton onClick={handleVoteUp}>

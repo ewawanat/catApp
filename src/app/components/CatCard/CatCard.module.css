@@ -6,22 +6,24 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    width: 500px;
+    width: 700px;
     padding: 20px;
     transition: transform 0.3s ease;
 }
 
 .cat-card-container:hover {
     transform: translateY(-5px);
-    /* Slight hover effect */
 }
 
 .image-fit {
-    border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
+    /* Ensure the image maintains its aspect ratio */
     width: 100%;
-    height: auto;
-    max-height: 400px;
+    /* Make the image fill the container */
+    height: 100%;
+    /* Make the image fill the container */
+    display: block;
+    /* Remove any unwanted space below the image */
 }
 
 .actions-container {

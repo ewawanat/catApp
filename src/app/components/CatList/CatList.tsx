@@ -10,7 +10,6 @@ type CatListProps = {
 };
 
 const CatList = ({ catData }: CatListProps) => {
-    console.log('catData', catData)
     const catCards = catData.map((cat) => {
         return <CatCard key={cat.id} cat={cat} />
     })

@@ -1,4 +1,5 @@
 "use client";
+import "../../styles/globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { CircularProgress, Typography } from "@mui/material";
@@ -10,8 +11,6 @@ import styles from './CatBreedCard.module.css'
 const BreedDetails = () => {
     const router = useRouter();
     const { breed_id } = router.query;
-
-    console.log("breed_id", breed_id);
 
     const [breedDetails, setBreedDetails] = useState<AppCatBreedDetails>();
     const [loading, setLoading] = useState(true);
@@ -26,17 +25,15 @@ const BreedDetails = () => {
         const fetchBreedDetails = async () => {
             try {
                 const response = await fetch(`https://api.thecatapi.com/v1/images/${breed_id}`);
-                const rawData = await response.text();
-                console.log("Raw response:", rawData);
 
                 if (!response.ok) {
-                    console.error("Error response:", rawData);
-                    setError("Failed to fetch breed details");
+                    setError("Error fetching breed details");
                     return;
                 }
+                const rawData = await response.text();
+
 
                 const data = JSON.parse(rawData);
-                console.log("data.breeds[0]", data.breeds[0]);
 
                 const transformedData = transformBreedData(data.breeds[0]);
                 setBreedDetails(transformedData);
@@ -62,7 +59,7 @@ const BreedDetails = () => {
 
     if (loading) {
         return (
-            <div>
+            <div className={styles['spinner-container']}>
                 Loading...
                 <CircularProgress />
             </div>
@@ -77,8 +74,8 @@ const BreedDetails = () => {
 
     return (
         <div className={styles['cat-breed-card-container']}>
-            <div className={styles["left-col"]}>
-                <Typography variant="h4" component="h1" gutterBottom>
+            <div className={styles['left-col']}>
+                <Typography variant='h4' component='h1' gutterBottom>
                     {breedDetails?.name || "Unknown Breed"}
                 </Typography>
                 <Image

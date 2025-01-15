@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import CatBreedSelector from "./components/CatBreedSelector/CatBreedSelector";
-import CatList from "./components/CatList/CatList";
-import styles from "./HomePage.module.css";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Typography } from '@mui/material';
+
+import CatBreedSelector from "./components/CatBreedSelector/CatBreedSelector";
+import CatList from "./components/CatList/CatList";
+
+import styles from "./HomePage.module.css";
 
 export type Weight = {
   imperial: string;
@@ -92,7 +94,7 @@ const HomePage = () => {
       setCatData(catsWithVotes);
     } catch (error) {
       console.error('Error fetching cats:', error);
-      setError("Error fetching cats");
+      setError('Error fetching cats');
     } finally {
       setLoading(false);
     }
