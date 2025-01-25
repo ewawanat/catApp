@@ -1,22 +1,25 @@
-"use client";
-import React, { useState, useEffect, useCallback } from "react";
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Typography } from '@mui/material';
 
-import CatBreedSelector from "./components/CatBreedSelector/CatBreedSelector";
-import CatList from "./components/CatList/CatList";
+import CatBreedSelector from './components/CatBreedSelector/CatBreedSelector';
+import CatList from './components/CatList/CatList';
 
-import styles from "./HomePage.module.css";
+import styles from './HomePage.module.css';
 
 export type Weight = {
   imperial: string;
   metric: string;
 };
+
 export type Breed = {
   id: string;
   weight: Weight;
   life_span: string;
 };
+
 export type Cat = {
   id: string;
   url: string;
@@ -29,7 +32,7 @@ export type Cat = {
 type Image = {
   id: string;
   url: string;
-}
+};
 
 type Vote = {
   id: string;
@@ -47,7 +50,8 @@ const HomePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchVotesForCats = useCallback(async () => {
+  // Fetch votes for cats
+  const fetchVotesForCats = async () => {
     try {
       const response = await fetch(`https://api.thecatapi.com/v1/votes`, {
         headers: {
@@ -59,15 +63,17 @@ const HomePage = () => {
         console.error('Error fetching votes:', errorText);
         return [];
       }
-      const data = await response.json()
+      const data = await response.json();
+      console.log('votes data', data);
       return data || [];
     } catch (error) {
       console.error('Error fetching votes:', error);
       return [];
     }
-  }, []);
+  };
 
-  const fetchCats = useCallback(async () => {
+  // Fetch cats and combine them with votes data
+  const fetchCats = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -93,11 +99,12 @@ const HomePage = () => {
     } finally {
       setLoading(false);
     }
-  }, [fetchVotesForCats]);
+  };
 
+  // Fetch cats when component mounts or selected breed changes
   useEffect(() => {
     fetchCats();
-  }, [selectedBreed, fetchCats]);
+  }, [selectedBreed]);
 
   const handleBreedSelect = (breedId: string | null) => {
     setSelectedBreed(breedId);
@@ -105,18 +112,18 @@ const HomePage = () => {
 
   return (
     <div className={styles.container}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant='h4' gutterBottom>
         Cat Images
       </Typography>
       <CatBreedSelector onBreedSelect={handleBreedSelect} />
       {loading && (
         <div className={styles['spinner-container']}>
-          <Typography variant="h6">Fetching your cats...</Typography>
+          <Typography variant='h6'>Fetching your cats...</Typography>
           <CircularProgress />
         </div>
       )}
       {error && (
-        <Typography color="error">{error}</Typography>
+        <Typography color='error'>{error}</Typography>
       )}
       {!loading && !error && <CatList catData={catData} />}
     </div>

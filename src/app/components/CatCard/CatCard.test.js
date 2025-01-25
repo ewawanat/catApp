@@ -5,11 +5,11 @@ import { userEvent } from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 import CatCard from './CatCard';
-import { useFavourites } from '../../../context/FavouritesContext';
+// import { useFavourites } from '../../../context/FavouritesContext';
 
-jest.mock('../../../context/FavouritesContext', () => ({
-    useFavourites: jest.fn(),
-}));
+// jest.mock('../../../context/FavouritesContext', () => ({
+//     useFavourites: jest.fn(),
+// }));
 expect.extend(toHaveNoViolations); // Extending jest to use axe matcher
 
 
@@ -22,7 +22,6 @@ describe('CatCard', () => {
         votes: 10,
     };
     it('renders and allows voting', async () => {
-        // Mock the return value of useFavourites
         useFavourites.mockReturnValue({
             favourites: [{ id: '1', url: 'https://example.com/cat.jpg', width: 500, height: 500, votes: 10 }],
             addFavourite: jest.fn(),
