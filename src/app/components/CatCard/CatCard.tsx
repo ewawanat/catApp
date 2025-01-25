@@ -10,17 +10,75 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import Typography from '@mui/material/Typography';
 
 import { Cat } from '@/app/page';
-import { useFavourites } from '../../../context/FavouritesContext';
 import styles from './CatCard.module.css';
+import { error } from 'console';
 
 type CatProps = {
     cat: Cat;
 };
 
 const CatCard = ({ cat }: CatProps) => {
-    const { favourites, addFavourite, removeFavourite } = useFavourites();
-    const isFavourite = favourites.some((fav) => fav.id === cat.id);
+    const [favourites, setFavourites] = useState<Cat[]>([]);
+    const isFavourite = favourites.some((fav) => fav.id === cat.id); // Check if the cat is in favourites
     const [votes, setVotes] = useState(cat.votes || 0);
+    const [addFavouriteError, setAddFavouriteError] = useState<string | null>(null);
+
+    const addFavourite = async (cat: Cat) => {
+        try {
+            const requestBody = JSON.stringify({
+                image_id: cat.id,
+                sub_id: 'user-123',
+            });
+
+            const response = await fetch('https://api.thecatapi.com/v1/favourites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
+                },
+                body: requestBody,
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text(); // Get the error text for more details
+                throw new Error(`Failed to add favourite. Status: ${response.status}. ${errorText}`);
+            }
+
+            const data = await response.json();
+            if (data.message === 'SUCCESS') {
+                setFavourites((prev) => [...prev, cat]); // Add to favourites list
+            }
+        } catch (error) {
+            // Log the error details
+            console.error('Error adding favourite:', error);
+            // Optionally, display a user-friendly error message
+            setAddFavouriteError('There was an issue adding the cat to your favourites.');
+        }
+    };
+
+
+    const removeFavourite = async (favouriteId: string) => {
+        console.log('favouriteId to be removed', favouriteId)
+        // try {
+        //     const response = await fetch(
+        //         `https://api.thecatapi.com/v1/favourites/${favouriteId}`,
+        //         {
+        //             method: 'DELETE',
+        //             headers: {
+        //                 'x-api-key': process.env.NEXT_PUBLIC_CAT_API_KEY || '',
+        //             },
+        //         }
+        //     );
+
+        //     if (!response.ok) {
+        //         throw new Error('Failed to remove favourite');
+        //     }
+
+        //     setFavourites((prev) => prev.filter((fav) => fav.id !== favouriteId)); // Remove from favourites list
+        // } catch (error) {
+        //     console.error('Error removing favourite:', error);
+        // }
+    };
 
     const toggleFavorite = () => {
         if (isFavourite) {
@@ -40,11 +98,10 @@ const CatCard = ({ cat }: CatProps) => {
                 },
                 body: JSON.stringify({
                     image_id: cat.id,
-                    sub_id: 'user-123', //TODO: change in a real app - for now, just hardcoded user ID
+                    sub_id: 'user-123', // TODO: change in a real app - for now, just hardcoded user ID
                     value,
                 }),
             });
-
             if (!response.ok) {
                 throw new Error('Failed to vote for cat');
             }
@@ -63,7 +120,10 @@ const CatCard = ({ cat }: CatProps) => {
         await voteForCat(-1);
     };
 
+    if (addFavouriteError) return <Typography color="error">{addFavouriteError}</Typography>
+
     return (
+
         <div className={styles['cat-card-container']}>
             <Link
                 href={{
